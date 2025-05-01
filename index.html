@@ -9,6 +9,28 @@
     <title>Tic Tac Toe</title>
   </head>
   <body>
-    <main></main>
+    <main class="game-container">
+      <h1>Tic Tac Toe</h1>
+
+      <section class="game-status">
+        <p id="status-message">Player X's turn</p>
+      </section>
+
+      <section class="game-board" aria-label="Tic Tac Toe game board">
+        <div class="cell" data-index="0" aria-label="cell 1"></div>
+        <div class="cell" data-index="1" aria-label="cell 2"></div>
+        <div class="cell" data-index="2" aria-label="cell 3"></div>
+        <div class="cell" data-index="3" aria-label="cell 4"></div>
+        <div class="cell" data-index="4" aria-label="cell 5"></div>
+        <div class="cell" data-index="5" aria-label="cell 6"></div>
+        <div class="cell" data-index="6" aria-label="cell 7"></div>
+        <div class="cell" data-index="7" aria-label="cell 8"></div>
+        <div class="cell" data-index="8" aria-label="cell 9"></div>
+      </section>
+
+      <section class="game-controls">
+        <button id="reset-button" class="btn">New Game</button>
+      </section>
+    </main>
   </body>
 </html>
