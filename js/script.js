@@ -91,6 +91,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function initGame() {
+    cells.forEach((cell) => {
+      cell.textContent = '';
+      cell.classList.remove('x', 'o', 'winner');
+      boardState = ['', '', '', '', '', '', '', '', ''];
+      currentPlayer = 'X';
+      gameActive = true;
+    });
+  }
+
   // EVENT LISTENERS
   gameBoard.addEventListener('click', handleBoardClick);
+  resetButton.addEventListener('click', initGame);
+
+  // INITIALIZE THE GAME
+  initGame();
 });
