@@ -43,6 +43,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return boardState.every((cell) => cell !== '');
   }
 
+  function highlightWinningCells() {
+    if (winningCombo) {
+      winningCombo.forEach((index) => {
+        document
+          .querySelector(`[data-index="${index}"]`)
+          .classList.add('winner');
+      });
+    }
+  }
+
+  function updateStatusMessage(message) {
+    statusMessage.textContent = message || `Player ${currentPlayer}'s turn`;
+  }
+
   function handleCellClick(cell, index) {
     // Check if cell is already filled or game is not active
     if (boardState[index] !== '' || !gameActive) return;
@@ -55,23 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for win or draw
     if (checkWin()) {
       gameActive = false;
+      highlightWinningCells();
+      updateStatusMessage(`Player ${currentPlayer} wins!`);
 
-      if (winningCombo) {
-        winningCombo.forEach((index) => {
-          document
-            .querySelector(`[data-index="${index}"]`)
-            .classList.add('winner');
-        });
-
-        statusMessage.textContent = `Player ${currentPlayer} wins!`;
-
-        return;
-      }
+      return;
     }
 
     if (checkDraw()) {
       gameActive = false;
-      statusMessage.textContent = "It's a draw!";
+      updateStatusMessage("It's a draw!");
+
       return;
     }
 
@@ -79,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
 
     // Update Status
-    statusMessage.textContent = `Player ${currentPlayer}'s turn`;
+    updateStatusMessage();
   }
 
   function handleBoardClick(e) {
@@ -95,10 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
     cells.forEach((cell) => {
       cell.textContent = '';
       cell.classList.remove('x', 'o', 'winner');
-      boardState = ['', '', '', '', '', '', '', '', ''];
-      currentPlayer = 'X';
-      gameActive = true;
     });
+
+    boardState = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = 'X';
+    gameActive = true;
+    updateStatusMessage();
   }
 
   // EVENT LISTENERS
