@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentPlayer = 'X';
   let gameActive = true;
   let boardState = ['', '', '', '', '', '', '', '', ''];
-  // let gameBoard = new Array(9).fill('');
+  let winningCombo = null;
 
   const winningCombinations = [
     [0, 1, 2], // Rows
@@ -21,4 +21,76 @@ document.addEventListener('DOMContentLoaded', () => {
     [0, 4, 8], // Diagonals
     [2, 4, 6],
   ];
+
+  function checkWin() {
+    for (const combo of winningCombinations) {
+      const [a, b, c] = combo;
+
+      if (
+        boardState[a] === currentPlayer &&
+        boardState[b] === currentPlayer &&
+        boardState[c] === currentPlayer
+      ) {
+        winningCombo = combo;
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function checkDraw() {
+    return boardState.every((cell) => cell !== '');
+  }
+
+  function handleCellClick(cell, index) {
+    // Check if cell is already filled or game is not active
+    if (boardState[index] !== '' || !gameActive) return;
+
+    // Update the board state and UI
+    boardState[index] = currentPlayer;
+    cell.textContent = currentPlayer;
+    cell.classList.add(currentPlayer.toLowerCase());
+
+    // Check for win or draw
+    if (checkWin()) {
+      gameActive = false;
+
+      if (winningCombo) {
+        winningCombo.forEach((index) => {
+          document
+            .querySelector(`[data-index="${index}"]`)
+            .classList.add('winner');
+        });
+
+        statusMessage.textContent = `Player ${currentPlayer} wins!`;
+
+        return;
+      }
+    }
+
+    if (checkDraw()) {
+      gameActive = false;
+      statusMessage.textContent = "It's a draw!";
+      return;
+    }
+
+    // Switch Player
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+    // Update Status
+    statusMessage.textContent = `Player ${currentPlayer}'s turn`;
+  }
+
+  function handleBoardClick(e) {
+    if (e.target.classList.contains('cell')) {
+      const cell = e.target;
+      const index = parseInt(cell.getAttribute('data-index'));
+
+      handleCellClick(cell, index);
+    }
+  }
+
+  // EVENT LISTENERS
+  gameBoard.addEventListener('click', handleBoardClick);
 });
